@@ -7,6 +7,13 @@ import (
 	"net/http"
 )
 
+func ExibePaginaIndex(ctx *gin.Context) {
+	var alunos []models.Aluno
+	database.DB.Find(&alunos)
+	ctx.HTML(http.StatusOK, "index.html", gin.H{
+		"alunos": alunos,
+	})
+}
 func Ping(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{
 		"message": "pong",
@@ -124,4 +131,8 @@ func AtualizaAluno(ctx *gin.Context) {
 	}
 	database.DB.Save(&aluno)
 	ctx.JSON(http.StatusOK, aluno)
+}
+
+func ExibePaginaNotFound(ctx *gin.Context) {
+	ctx.HTML(http.StatusNotFound, "404.html", nil)
 }
