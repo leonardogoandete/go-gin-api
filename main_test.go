@@ -20,5 +20,5 @@ func TestVerificaRetonoPingComSucesso(t *testing.T) {
 	req, _ := http.NewRequest("GET", "/ping", nil)
 	resp := httptest.NewRecorder()
 	r.ServeHTTP(resp, req)
-	assert.Equal(t, http.StatusOK, resp.Code)
+	assert.Equal(t, http.StatusOK, resp.Code, "Status code deve ser 200 OK")
 }
