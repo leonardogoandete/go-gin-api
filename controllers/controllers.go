@@ -60,6 +60,13 @@ func CriaNovoAluno(ctx *gin.Context) {
 		})
 		return
 	}
+
+	if err := models.ValidaAluno(&aluno); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"error": "Validação falhou: " + err.Error(),
+		})
+		return
+	}
 	database.DB.Create(&aluno)
 	ctx.JSON(http.StatusCreated, aluno)
 }
@@ -87,26 +94,28 @@ func DeletaAluno(ctx *gin.Context) {
 }
 
 func AtualizaAluno(ctx *gin.Context) {
-	id := ctx.Param("id")
+	var aluno models.Aluno
+	id := ctx.Params.ByName("id")
+	database.DB.First(&aluno, id)
+
 	if id == "" {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"error": "ID do aluno não pode ser vazio",
 		})
 		return
 	}
-	var aluno models.Aluno
 	if err := ctx.ShouldBindJSON(&aluno); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"error": "Dados inválidos",
 		})
 		return
 	}
-	database.DB.Model(&aluno).Where("id = ?", id).Updates(aluno)
-	if database.DB.RowsAffected == 0 {
-		ctx.JSON(http.StatusNotFound, gin.H{
-			"error": "Aluno não encontrado",
+	if err := models.ValidaAluno(&aluno); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
 		})
 		return
 	}
+	database.DB.Save(&aluno)
 	ctx.JSON(http.StatusOK, aluno)
 }
