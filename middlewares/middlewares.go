@@ -3,18 +3,15 @@ package middlewares
 import (
 	"github.com/gin-gonic/gin"
 	"log"
+	"strings"
 	"time"
 )
 
 func ConfigureContentType() func(c *gin.Context) {
 	return func(c *gin.Context) {
-		// verify if the request is starting with /api
-		// /api/*
-		if c.Request.URL.Path == "/api" || c.Request.URL.Path == "/api/" {
-			// Set the Content-Type header to application/json for API requests
+		if strings.HasPrefix(c.Request.URL.Path, "/api") {
 			c.Header("Content-Type", "application/json; charset=utf-8")
 		} else {
-			// Set the Content-Type header to text/html for non-API requests
 			c.Header("Content-Type", "text/html; charset=utf-8")
 		}
 		c.Next()
