@@ -37,7 +37,7 @@ func DeletaAlunoMock() {
 func TestVerificaRetonoPingComSucesso(t *testing.T) {
 	r := SetupRotasDeTeste()
 	r.GET("/api/ping", controllers.Ping)
-	req, _ := http.NewRequest("GET", "/ping", nil)
+	req, _ := http.NewRequest("GET", "/api/ping", nil)
 	resp := httptest.NewRecorder()
 	r.ServeHTTP(resp, req)
 	assert.Equal(t, http.StatusOK, resp.Code, "Status code deve ser 200 OK")
