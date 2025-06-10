@@ -11,6 +11,7 @@ func HandleRequests() {
 	r := gin.Default()
 	r.Use(middlewares.ConfigureContentType())
 	r.Use(middlewares.ConfigureLogger())
+	r.GET("/ping", controllers.Ping)
 	r.GET("/alunos", controllers.ExibeTodosAlunos)
 	r.POST("/alunos", controllers.CriaNovoAluno)
 	r.DELETE("/alunos/:id", controllers.DeletaAluno)

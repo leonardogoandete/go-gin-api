@@ -7,6 +7,12 @@ import (
 	"net/http"
 )
 
+func Ping(ctx *gin.Context) {
+	ctx.JSON(http.StatusOK, gin.H{
+		"message": "pong",
+	})
+}
+
 func ExibeTodosAlunos(ctx *gin.Context) {
 	var alunos []models.Aluno
 	database.DB.Find(&alunos)
